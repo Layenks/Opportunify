@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Criteria{% endblock %}
+
+{% block body %}
+    <h1>Criteria</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ criterion.id }}</td>
+            </tr>
+            <tr>
+                <th>Experience</th>
+                <td>{{ criterion.experience }}</td>
+            </tr>
+            <tr>
+                <th>Certifs</th>
+                <td>{{ criterion.certifs ? criterion.certifs|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Languages</th>
+                <td>{{ criterion.languages ? criterion.languages|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Skills</th>
+                <td>{{ criterion.skills ? criterion.skills|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>{{ criterion.level }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_criteria_index') }}">back to list</a>
+
+    <a href="{{ path('app_criteria_edit', {'id': criterion.id}) }}">edit</a>
+
+    {{ include('criteria/_delete_form.html.twig') }}
+{% endblock %}

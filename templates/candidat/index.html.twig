@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidat index{% endblock %}
+
+{% block body %}
+    <h1>Candidat index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>Status</th>
+                <th>GitLink</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for candidat in candidats %}
+            <tr>
+                <td>{{ candidat.id }}</td>
+                <td>{{ candidat.username }}</td>
+                <td>{{ candidat.roles ? candidat.roles|json_encode : '' }}</td>
+                <td>{{ candidat.password }}</td>
+                <td>{{ candidat.status }}</td>
+                <td>{{ candidat.gitLink }}</td>
+                <td>
+                    <a href="{{ path('app_candidat_show', {'id': candidat.id}) }}">show</a>
+                    <a href="{{ path('app_candidat_edit', {'id': candidat.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_candidat_new') }}">Create new</a>
+{% endblock %}

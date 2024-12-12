@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Criteria index{% endblock %}
+
+{% block body %}
+    <h1>Criteria index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Experience</th>
+                <th>Certifs</th>
+                <th>Languages</th>
+                <th>Skills</th>
+                <th>Level</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for criterion in criterias %}
+            <tr>
+                <td>{{ criterion.id }}</td>
+                <td>{{ criterion.experience }}</td>
+                <td>{{ criterion.certifs ? criterion.certifs|json_encode : '' }}</td>
+                <td>{{ criterion.languages ? criterion.languages|json_encode : '' }}</td>
+                <td>{{ criterion.skills ? criterion.skills|json_encode : '' }}</td>
+                <td>{{ criterion.level }}</td>
+                <td>
+                    <a href="{{ path('app_criteria_show', {'id': criterion.id}) }}">show</a>
+                    <a href="{{ path('app_criteria_edit', {'id': criterion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_criteria_new') }}">Create new</a>
+{% endblock %}

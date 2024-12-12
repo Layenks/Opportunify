@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Proof index{% endblock %}
+
+{% block body %}
+    <h1>Proof index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Images</th>
+                <th>DateUpload</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for proof in proofs %}
+            <tr>
+                <td>{{ proof.id }}</td>
+                <td>{{ proof.images ? proof.images|json_encode : '' }}</td>
+                <td>{{ proof.dateUpload ? proof.dateUpload|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_proof_show', {'id': proof.id}) }}">show</a>
+                    <a href="{{ path('app_proof_edit', {'id': proof.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_proof_new') }}">Create new</a>
+{% endblock %}
