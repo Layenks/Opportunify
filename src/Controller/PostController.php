@@ -16,10 +16,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PostController extends AbstractController
 {
     #[Route(name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository,EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof Recruiter) {
+            throw $this->createAccessDeniedException('Vous devez être recruteur pour ajouter un post.');
+        }
+
+        $query = $em->createQuery("SELECT p 
+                                  FROM App\Entity\Post p
+                                  JOIN p.recruiter r
+                                  WHERE r.id = :id")->setParameter("id",$user->getId());
+        $tab_res = $query->getResult();
+
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' =>  $tab_res,
         ]);
     }
 
@@ -53,10 +64,16 @@ final class PostController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
-    public function show(Post $post): Response
+    public function show(Post $post,EntityManagerInterface $em,$id): Response
     {
+        $query = $em->createQuery("SELECT c 
+                                  FROM App\Entity\Criteria c
+                                  JOIN c.post p
+                                  WHERE p.id = :id")->setParameter("id",$id);
+        $tab_res = $query->getResult();
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'criterias' => $tab_res
         ]);
     }
 

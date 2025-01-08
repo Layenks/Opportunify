@@ -33,12 +33,49 @@
             </tr>
         </tbody>
     </table>
+    <br>
+    <h1>Creteria of post {{ post.title }} </h1>
+    <br>
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Experience</th>
+                <th>Certifs</th>
+                <th>Languages</th>
+                <th>Skills</th>
+                <th>Level</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for criterion in criterias %}
+            <tr>
+                <td>{{ criterion.id }}</td>
+                <td>{{ criterion.experience }}</td>
+                <td>{{ criterion.certifs ? criterion.certifs|json_encode : '' }}</td>
+                <td>{{ criterion.languages ? criterion.languages|json_encode : '' }}</td>
+                <td>{{ criterion.skills ? criterion.skills|json_encode : '' }}</td>
+                <td>{{ criterion.level }}</td>
+                <td>
+                    <a href="{{ path('app_criteria_show', {'id': criterion.id}) }}">show</a>
+                    <a href="{{ path('app_criteria_edit', {'id': criterion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+   <br>
+    
+    <a href="{{ path('app_post_index') }}">back to list of posts</a>
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit post</a>
 
-    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-
-    <a href="{{path('app_criteria_new_from_post',{'id':post.id})}}">add Criteria</a>
+    <a href="{{path('app_criteria_new_from_post',{'id':post.id})}}">add Criteria for post {{post.title}}</a>
 
     {{ include('post/_delete_form.html.twig') }}
 {% endblock %}
