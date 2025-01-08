@@ -1,4 +1,84 @@
+{# templates/criteria/_form.html.twig #}
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div>
+        {# Champ Experience #}
+        <div>
+            {{ form_label(form.experience) }}
+            {{ form_widget(form.experience) }}
+            {{ form_errors(form.experience) }}
+        </div>
+
+        {# Champ Level #}
+        <div>
+            {{ form_label(form.level) }}
+            {{ form_widget(form.level) }}
+            {{ form_errors(form.level) }}
+        </div>
+
+        {# Collection Certifs #}
+        <fieldset>
+            <legend>Certifications</legend>
+            <div id="certifs-list" data-prototype="{{ form_widget(form.certifs.vars.prototype)|e('html_attr') }}">
+                {% for certif in form.certifs %}
+                    <div>{{ form_widget(certif) }}</div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-certif-btn">Ajouter Certification</button>
+        </fieldset>
+
+        {# Collection Languages #}
+        <fieldset>
+            <legend>Language</legend>
+            <div id="languages-list" data-prototype="{{ form_widget(form.languages.vars.prototype)|e('html_attr') }}">
+                {% for language in form.languages %}
+                    <div>{{ form_widget(language) }}</div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-language-btn">Ajouter Langue</button>
+        </fieldset>
+
+        {# Collection Skills #}
+        <fieldset>
+            <legend>Skills</legend>
+            <div id="skills-list" data-prototype="{{ form_widget(form.skills.vars.prototype)|e('html_attr') }}">
+                {% for skill in form.skills %}
+                    <div>{{ form_widget(skill) }}</div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-skill-btn">Ajouter Compétence</button>
+        </fieldset>
+    </div>
+    <button type="submit">Soumettre</button>
 {{ form_end(form) }}
+
+{# JavaScript pour gérer les ajouts dynamiques #}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function addDynamicField(buttonSelector, listSelector) {
+            const button = document.querySelector(buttonSelector);
+            const list = document.querySelector(listSelector);
+
+            if (button && list) {
+                const prototype = list.dataset.prototype;
+                let index = list.children.length;
+
+                button.addEventListener('click', () => {
+                    // Remplace le placeholder __name__ par l'index actuel
+                    const newField = prototype.replace(/__name__/g, index);
+                    const div = document.createElement('div');
+                    div.innerHTML = newField;
+
+                    // Ajoute le nouveau champ dans la liste
+                    list.appendChild(div);
+                    index++;
+                });
+            }
+        }
+
+        // Initialiser les boutons pour chaque collection
+        addDynamicField('.add-certif-btn', '#certifs-list');
+        addDynamicField('.add-language-btn', '#languages-list');
+        addDynamicField('.add-skill-btn', '#skills-list');
+    });
+</script>

@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 #[Route('/candidat')]
 final class CandidatController extends AbstractController
@@ -23,7 +25,7 @@ final class CandidatController extends AbstractController
     }
 
     #[Route('/new', name: 'app_candidat_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $candidat = new Candidat();
         $candidat->setRoles(["ROLE_CANDIDAT"]);
@@ -31,6 +33,11 @@ final class CandidatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hacher le mot de passe avant de persister
+            $plainPassword = $candidat->getPassword();
+            $hashedPassword = $passwordHasher->hashPassword($candidat, $plainPassword);
+            $candidat->setPassword($hashedPassword);
+
             $entityManager->persist($candidat);
             $entityManager->flush();
 

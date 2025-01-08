@@ -6,6 +6,8 @@ use App\Entity\Candidat;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 
 class CandidatType extends AbstractType
 {
@@ -13,7 +15,11 @@ class CandidatType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('password')
+            ->add('password',  PasswordType::class, [
+                'label' => 'Password',
+                'required' => true,
+                'mapped' => true,
+            ] )
             ->add('status')
             ->add('gitLink')
         ;

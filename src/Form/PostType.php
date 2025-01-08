@@ -24,12 +24,9 @@ class PostType extends AbstractType
             ->add('workMode')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
-            ->add('recruiter', EntityType::class, [
-                'class' => Recruiter::class,
-                'choice_label' => 'id',
-            ])
+       
         ;
     }
 

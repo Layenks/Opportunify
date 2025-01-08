@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\Recruiter;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,16 @@ final class PostController extends AbstractController
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $post = new Post();
+       // Vérifie si l'utilisateur connecté est un Recruiter
+       $user = $this->getUser();
+
+       if (!$user instanceof Recruiter) {
+           throw $this->createAccessDeniedException('Vous devez être recruteur pour ajouter un post.');
+       }
+
+       $post = new Post();
+       $post->setRecruiter($user); // Liaison directe entre le Recruiter et le Post
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 

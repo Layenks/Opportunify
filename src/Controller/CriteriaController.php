@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Criteria;
+use App\Entity\Post;
 use App\Form\CriteriaType;
 use App\Repository\CriteriaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +40,27 @@ final class CriteriaController extends AbstractController
         return $this->render('criteria/new.html.twig', [
             'criterion' => $criterion,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/new/{id}', name: 'app_criteria_new_from_post', methods: ['GET', 'POST'])]
+    public function addCriteriaFromPost($id,Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $post = $entityManager->find(Post::class,$id);
+        $criterion = new Criteria();
+        $criterion->setPost($post);
+        $form = $this->createForm(CriteriaType::class, $criterion);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($criterion);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_criteria_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('criteria/new.html.twig', [
+            'criterion' => $criterion,
+            'form' => $form->createView(),
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Recruiter;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,7 +14,11 @@ class RecruiterType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('password')
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'required' => true,
+                'mapped' => true,
+            ])
             ->add('position')
             ->add('enterpriseName')
         ;

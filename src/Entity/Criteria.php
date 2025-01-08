@@ -17,7 +17,7 @@ class Criteria
     private ?string $experience = null;
 
     #[ORM\Column]
-    private ?array $certifs = null;
+    private ?array $certifs = [];
 
     #[ORM\Column]
     private array $languages = [];
