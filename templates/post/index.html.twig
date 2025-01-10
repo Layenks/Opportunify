@@ -39,7 +39,7 @@
 </style>
 
 <div class="container">
-    {% if is_granted('ROLE_RECRUITER') %}
+    {% if is_granted('ROLE_RECRUITER') or is_granted('ROLE_ADMIN') %}
         <div class="custom-container">
             <h1 class="mb-4 text-center">Liste des Posts</h1>
             <table class="table table-striped table-hover text-center align-middle">

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Admin;
 use App\Entity\Post;
 use App\Entity\Recruiter;
 use App\Form\PostType;
@@ -21,15 +22,22 @@ final class PostController extends AbstractController
     {
         $user = $this->getUser();
         
-        if($security->isGranted('ROLE_RECRUITER')) {
-        if (!$user instanceof Recruiter) {
+        if($security->isGranted('ROLE_RECRUITER') || $security->isGranted('ROLE_ADMIN')) {
+        if (!$user instanceof Recruiter && !$user instanceof Admin) {
                 throw $this->createAccessDeniedException('Vous devez être recruteur pour acceder et ajouter un post.');
+        }else if($user instanceof Recruiter){
+            $query = $em->createQuery("SELECT p 
+            FROM App\Entity\Post p
+            JOIN p.recruiter r
+            WHERE r.id = :id")->setParameter("id",$user->getId());
+            $tab_res = $query->getResult();
         }
-        $query = $em->createQuery("SELECT p 
-                                  FROM App\Entity\Post p
-                                  JOIN p.recruiter r
-                                  WHERE r.id = :id")->setParameter("id",$user->getId());
-        $tab_res = $query->getResult();
+        if($user instanceof Admin){
+            return $this->render('post/index.html.twig', [
+                'posts' =>  $postRepository->findAll()
+            ]);   
+        }
+
         return $this->render('post/index.html.twig', [
             'posts' =>  $tab_res,
         ]);

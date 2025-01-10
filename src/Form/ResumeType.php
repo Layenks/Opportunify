@@ -15,7 +15,7 @@ class ResumeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('filePath')
+            ->add('filePath', )
             ->add('post', EntityType::class, [
                 'class' => Post::class,
                 'choice_label' => 'id',
