@@ -8,6 +8,7 @@ use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,22 +17,27 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PostController extends AbstractController
 {
     #[Route(name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository,EntityManagerInterface $em): Response
+    public function index(PostRepository $postRepository,EntityManagerInterface $em,Security $security): Response
     {
         $user = $this->getUser();
+        
+        if($security->isGranted('ROLE_RECRUITER')) {
         if (!$user instanceof Recruiter) {
-            throw $this->createAccessDeniedException('Vous devez être recruteur pour ajouter un post.');
+                throw $this->createAccessDeniedException('Vous devez être recruteur pour acceder et ajouter un post.');
         }
-
         $query = $em->createQuery("SELECT p 
                                   FROM App\Entity\Post p
                                   JOIN p.recruiter r
                                   WHERE r.id = :id")->setParameter("id",$user->getId());
         $tab_res = $query->getResult();
-
         return $this->render('post/index.html.twig', [
             'posts' =>  $tab_res,
         ]);
+        }else{
+            return $this->render('post/index.html.twig', [
+                'posts' =>  $postRepository->findAll()
+            ]);
+        }
     }
 
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]

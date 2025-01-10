@@ -1,7 +1,20 @@
-<form method="GET" >
-    <input type="radio" name="role" value="ROLE_RECRUITER"/>Recruiter
-    <br>
-    <input type="radio" name="role" value="ROLE_CANDIDAT" />Candidat
-    <br>
-    <button type="submit" >Valider</button>
+<form method="GET" style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+    <h2 style="text-align: center; font-family: Arial, sans-serif;">Choisissez votre rôle</h2>
+    
+    <div style="margin-bottom: 20px;">
+        <input type="radio" name="role" value="ROLE_RECRUITER" id="recruiter" style="margin-right: 10px;">
+        <label for="recruiter" style="font-size: 16px; font-family: Arial, sans-serif;">Recruiteur</label>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <input type="radio" name="role" value="ROLE_CANDIDAT" id="candidat" style="margin-right: 10px;">
+        <label for="candidat" style="font-size: 16px; font-family: Arial, sans-serif;">Candidat</label>
+    </div>
+
+    <div style="text-align: center;">
+        <button type="submit" style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            Valider
+        </button>
+    </div>
 </form>
+
